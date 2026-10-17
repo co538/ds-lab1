@@ -886,7 +886,7 @@ html,body{overflow:hidden}
         <span class="kw">if</span> (<span class="nm">Find</span>(id) != NULL)     <span class="kw">return</span> <span class="kw">false</span>;
         Device* p = head;
         <span class="kw">while</span> (p-&gt;next != NULL) {
-            <span class="cmt">// 双关键字有序插入：优先级更大，或同级但ID更大处停止</span>
+            <span class="cmt">// 找插入位置：优先级比它大就停，同级比ID字典序</span>
             <span class="kw">if</span> (p-&gt;next-&gt;priority &gt; prio) <span class="kw">break</span>;
             <span class="kw">if</span> (p-&gt;next-&gt;priority == prio &amp;&amp;
                 <span class="nm">strcmp</span>(p-&gt;next-&gt;id, id) &gt; 0) <span class="kw">break</span>;
@@ -984,7 +984,7 @@ html,body{overflow:hidden}
         </ul>
       </div>
     </div>
-    <pre class="code cmp mt-m">    <span class="cmt">// 查看历史：借辅助栈两轮倒换输出，结束后恢复原栈</span>
+    <pre class="code cmp mt-m">    <span class="cmt">// 倒两次：先全压进辅助栈，再弹回来输出，原栈不变</span>
     <span class="kw">void</span> <span class="nm">ShowHistory</span>() {
         <span class="kw">if</span> (top == NULL) { cout &lt;&lt; "  当前无指令记录。" &lt;&lt; endl; <span class="kw">return</span>; }
         CommandStack aux;
@@ -1050,13 +1050,13 @@ html,body{overflow:hidden}
     <div class="grid g2 mt-m anim-fade-up" data-anim="fade-up" style="grid-template-columns:1fr 1fr;align-items:start">
       <div>
         <pre class="code cmp">    <span class="kw">bool</span> <span class="nm">EnQueue</span>(<span class="kw">const</span> DataPacket&amp; p, DataPacket* dropped = NULL) {
-        <span class="kw">if</span> (<span class="nm">Full</span>()) { <span class="cmt">// 队满：先出队丢弃最旧，再入队</span>
+        <span class="kw">if</span> (<span class="nm">Full</span>()) { <span class="cmt">// 队满：先把最旧的挤出去，再放新数据</span>
             <span class="kw">if</span> (dropped != NULL) *dropped = data[front];
-            front = (front + 1) % QUEUE_CAP;
+            front = (front + 1) % QUEUE_CAP;<span class="cmt">   // 队头后移一格，到末尾绕回0</span>
             count--;
         }
         data[rear] = p;
-        rear = (rear + 1) % QUEUE_CAP;
+        rear = (rear + 1) % QUEUE_CAP;<span class="cmt">     // 队尾后移一格，到末尾绕回0</span>
         count++;
         <span class="kw">return</span> <span class="kw">true</span>;
     }
