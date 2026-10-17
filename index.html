@@ -846,18 +846,13 @@ html,body{overflow:hidden}
     <h2 class="h2">设备结点与有序规则</h2>
     <div class="grid g2 mt-m anim-stagger-list" data-anim-target style="grid-template-columns:1fr 1fr">
       <div>
-        <pre class="code"><span class="cmt">// 设备信息（数据域）</span>
+        <pre class="code"><span class="cmt">// 有序单链表：管理在线设备</span>
 <span class="kw">struct</span> Device {
-    <span class="kw">char</span>      id[16];   <span class="cmt">// 设备ID（字符串）</span>
-    <span class="kw">int</span>       type;    <span class="cmt">// 0温度 1压力 2振动</span>
-    <span class="kw">int</span>       prio;    <span class="cmt">// 优先级 1~5，越小越高</span>
-    <span class="kw">long</span> <span class="kw">long</span> lastTime; <span class="cmt">// 最近上报时间戳</span>
-};
-
-<span class="cmt">// 带头结点的单链表结点</span>
-<span class="kw">struct</span> Node {
-    Device  data;
-    Node*   next;
+    <span class="kw">char</span>       id[ID_LEN];
+    DeviceType type;
+    <span class="kw">int</span>        priority;
+    <span class="kw">long</span> <span class="kw">long</span>  lastReport;
+    Device*    next;
 };</pre>
       </div>
       <div class="stack">
@@ -909,16 +904,19 @@ html,body{overflow:hidden}
       <div>
         <div class="log"><span class="hd">依次注册 6 台设备后的遍历输出</span>
 
-序号  优先级  设备ID    类型    最近上报
- 1      1      P001     压力      1001
- 2      2      T002     温度      1002
- 3      3      T001     温度      1003
- 4      3      T003     温度      1005
- 5      3      V001     振动      1004
- 6      5      P002     压力      1006
+  序号    优先级    设备ID    类型    最近上报
+  1    1    P001    压力    1001
+  2    2    T002    温度    1002
+  3    3    T001    温度    1003
+  4    3    T003    温度    1005
+  5    3    V001    振动    1004
+  6    5    P002    压力    1006
 <span class="cd">
 注销 T002 后统计
-在线设备总数：5 ｜ 温度 2 ｜ 压力 2 ｜ 振动 1</span></div>
+  在线设备总数：5
+  温度设备数量：2
+  压力设备数量：2
+  振动设备数量：1</span></div>
         <p class="dim mt-m" style="font-size:14px">优先级相同的 T001 / T003 / V001 严格按 ID 字典序排列，证明双关键字插入正确。</p>
       </div>
     </div>
@@ -933,10 +931,10 @@ html,body{overflow:hidden}
     <div class="grid g2 mt-m anim-stagger-list" data-anim-target style="grid-template-columns:42% 1fr;align-items:start">
       <div>
         <div class="stk">
-          <div class="c top"><span>指令#5 · V001 · 更新固件版本</span><span class="lb">栈顶</span></div>
-          <div class="c"><span>指令#4 · T003 · 校准压力传感器</span><span class="lb"> </span></div>
-          <div class="c"><span>指令#2 · T002 · 调整温度阈值45</span><span class="lb"> </span></div>
-          <div class="c"><span>指令#1 · T001 · 提高采样频率</span><span class="lb">栈底</span></div>
+          <div class="c top"><span>指令 5 · V001 · 更新固件版本</span><span class="lb">栈顶</span></div>
+          <div class="c"><span>指令 4 · T003 · 校准压力传感器</span><span class="lb"> </span></div>
+          <div class="c"><span>指令 2 · T002 · 调整温度阈值45</span><span class="lb"> </span></div>
+          <div class="c"><span>指令 1 · T001 · 提高采样频率</span><span class="lb">栈底</span></div>
         </div>
         <p class="dim mt-m" style="font-size:14px">压栈用头插法，出栈删首结点 —— 两个操作都是 O(1)。</p>
       </div>
@@ -959,7 +957,7 @@ html,body{overflow:hidden}
       </div>
     </div>
     <div class="deck-footer"><span class="dim2">模块2 · 控制指令撤销</span><span class="slide-number" data-current="10" data-total="17"></span></div>
-    <div class="notes">模块二用链式栈。左边是栈的示意：栈底是最早下发的指令#1，栈顶是最近的指令#5。“撤销最近”就是弹栈，天然就是 O(1)。选链式栈而不是顺序栈，是因为指令条数事先不知道，链式结构按需分配，不用担心溢出。</div>
+    <div class="notes">模块二用链式栈。左边是栈的示意：栈底是最早下发的指令 1，栈顶是最近的指令 5。“撤销最近”就是弹栈，天然就是 O(1)。选链式栈而不是顺序栈，是因为指令条数事先不知道，链式结构按需分配，不用担心溢出。</div>
   </section>
 
   <!-- ============ 11 模块2 历史 ============ -->
@@ -994,8 +992,8 @@ html,body{overflow:hidden}
         <span class="kw">while</span> (<span class="nm">Pop</span>(c)) aux.<span class="nm">Push</span>(c);
         cout &lt;&lt; "  指令历史（栈底→栈顶）：" &lt;&lt; endl;
         <span class="kw">while</span> (aux.<span class="nm">Pop</span>(c)) {
-            <span class="nm">printf</span>("  指令#%d  目标=%s  内容=%s  下发时间=%lld\n",
-                   c.no, c.targetId, c.content, c.time);
+            cout &lt;&lt; "  指令编号：" &lt;&lt; c.no &lt;&lt; "    目标设备：" &lt;&lt; c.targetId
+                 &lt;&lt; "    内容：" &lt;&lt; c.content &lt;&lt; "    下发时间：" &lt;&lt; c.time &lt;&lt; endl;
             <span class="nm">Push</span>(c);
         }
     }</pre>
@@ -1072,8 +1070,9 @@ html,body{overflow:hidden}
             <span class="kw">int</span> n = 0;
             <span class="kw">while</span> (cache.<span class="nm">DeQueue</span>(p)) {
                 n++;
-                <span class="nm">printf</span>("  [补传%d] 序列号=%d 设备=%s 值=%.2f 采集时间=%lld\n",
-                       n, p.seq, p.deviceId, p.value, p.time);
+                cout &lt;&lt; "  [补传" &lt;&lt; n &lt;&lt; "] 序列号：" &lt;&lt; p.seq &lt;&lt; "    设备：" &lt;&lt; p.deviceId
+                     &lt;&lt; "    数据值：" &lt;&lt; fixed &lt;&lt; setprecision(2) &lt;&lt; p.value
+                     &lt;&lt; "    采集时间：" &lt;&lt; p.time &lt;&lt; endl;
             }
             <span class="kw">if</span> (n &gt; 0) cout &lt;&lt; "  补传完成，共补传 " &lt;&lt; n &lt;&lt; " 条数据。" &lt;&lt; endl;
         }</pre>
@@ -1081,19 +1080,19 @@ html,body{overflow:hidden}
       </div>
       <div>
         <div class="log"><span class="hd">真实运行输出（节选）</span>
-<span class="ok">[上传]</span> 序列号=1 设备=T001 值=23.50 采集时间=3001
-<span class="ok">[上传]</span> 序列号=2 设备=P001 值=101.30 采集时间=3002
+  <span class="ok">[上传]</span> 序列号：1    设备：T001    数据值：23.50    采集时间：3001
+  <span class="ok">[上传]</span> 序列号：2    设备：P001    数据值：101.30    采集时间：3002
 <span class="cd">── 切换为网络中断 ──</span>
-<span class="nt">[缓存]</span> 序列号=3 设备=T001 值=23.60 采集时间=3003 已入队（1/50）
-<span class="nt">[网络]</span> 网络已恢复，开始按FIFO顺序补传缓存数据：
-  <span class="ok">[补传1]</span> 序列号=3 设备=T001 值=23.60 采集时间=3003
-  <span class="ok">[补传3]</span> 序列号=5 设备=V001 值=0.05 采集时间=3005
+  <span class="nt">[缓存]</span> 序列号：3    设备：T001    数据值：23.60    采集时间：3003    已入队（1/50）
+  <span class="nt">[网络]</span> 网络已恢复，开始按FIFO顺序补传缓存数据：
+  <span class="ok">[补传1]</span> 序列号：3    设备：T001    数据值：23.60    采集时间：3003
+  <span class="ok">[补传3]</span> 序列号：5    设备：V001    数据值：0.05    采集时间：3005
 <span class="cd">── 中断后连续接收 55 条，缓存达到上限 ──</span>
-<span class="dr">[丢弃]</span> 序列号=6 设备=T001 —— 缓存已满，丢弃最旧数据
-<span class="nt">[缓存]</span> 序列号=56 设备=V001 值=6.50 采集时间=3056 已入队（50/50）
+  <span class="dr">[丢弃]</span> 序列号：6    设备：T001    —— 缓存已满，丢弃最旧数据
+  <span class="nt">[缓存]</span> 序列号：56    设备：V001    数据值：6.50    采集时间：3056    已入队（50/50）
 <span class="cd">── 网络恢复：一次补传 50 条 ──</span>
-  <span class="ok">[补传1]</span> 序列号=11 设备=V001 值=1.50 采集时间=3011
-  <span class="ok">[补传50]</span> 序列号=60 设备=T001 值=0.50 采集时间=3060</div>
+  <span class="ok">[补传1]</span> 序列号：11    设备：V001    数据值：1.50    采集时间：3011
+  <span class="ok">[补传50]</span> 序列号：60    设备：T001    数据值：0.50    采集时间：3060</div>
         <p class="dim mt-m" style="font-size:14px">连续接收 55 条后，序列号 6~10 被依次丢弃，缓存稳定在 50/50，补传时起点正好是序列号 11。</p>
       </div>
     </div>
