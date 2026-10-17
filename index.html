@@ -641,7 +641,7 @@ code,pre{font-family:var(--font-mono)}
 
 </style>
 <style>
-/* ---------- 伪代码块 ---------- */
+/* ---------- 源码块 ---------- */
 .code{background:var(--surface-2);border:1px solid var(--border);border-left:3px solid var(--accent);
   border-radius:var(--radius);padding:20px 22px;font-family:var(--font-mono);font-size:15px;line-height:1.75;
   color:var(--text-1);white-space:pre;overflow:hidden;margin:0}
@@ -886,23 +886,25 @@ html,body{overflow:hidden}
     <h2 class="h2">插入即有序：一次扫描找到插入点</h2>
     <div class="grid g2 mt-m anim-fade-up" data-anim="fade-up" style="grid-template-columns:1fr 1fr;align-items:start">
       <div>
-        <pre class="code"><span class="cmt">// 找到第一个"应排在新结点之后"的结点 cur</span>
-Node* pre = head;
-Node* cur = head-&gt;next;
-<span class="kw">while</span> (cur != NULL &amp;&amp; <span class="nm">shouldPrecede</span>(cur, fresh)) {
-    pre = cur;
-    cur = cur-&gt;next;
-}
-fresh-&gt;next = cur;   <span class="cmt">// 新结点插到 cur 之前</span>
-pre-&gt;next   = fresh;
-count++;             <span class="cmt">// 维护总数</span>
-
-<span class="cmt">// 双关键字比较：优先级升序，同级按ID字典序</span>
-<span class="kw">bool</span> <span class="nm">shouldPrecede</span>(Node* a, Node* b) {
-    <span class="kw">if</span> (a-&gt;data.prio != b-&gt;data.prio)
-        <span class="kw">return</span> a-&gt;data.prio &lt; b-&gt;data.prio;
-    <span class="kw">return</span> strcmp(a-&gt;data.id, b-&gt;data.id) &lt; 0;
-}</pre>
+        <pre class="code">    <span class="kw">bool</span> <span class="nm">Register</span>(<span class="kw">const</span> <span class="kw">char</span>* id, DeviceType type, <span class="kw">int</span> prio, <span class="kw">long</span> <span class="kw">long</span> t) {
+        <span class="kw">if</span> (prio &lt; 1 || prio &gt; 5) <span class="kw">return</span> <span class="kw">false</span>;
+        <span class="kw">if</span> (<span class="nm">Find</span>(id) != NULL)     <span class="kw">return</span> <span class="kw">false</span>;
+        Device* p = head;
+        <span class="kw">while</span> (p-&gt;next != NULL) {
+            <span class="cmt">// 双关键字有序插入：优先级更大，或同级但ID更大处停止</span>
+            <span class="kw">if</span> (p-&gt;next-&gt;priority &gt; prio) <span class="kw">break</span>;
+            <span class="kw">if</span> (p-&gt;next-&gt;priority == prio &amp;&amp;
+                <span class="nm">strcmp</span>(p-&gt;next-&gt;id, id) &gt; 0) <span class="kw">break</span>;
+            p = p-&gt;next;
+        }
+        Device* s = <span class="kw">new</span> Device;
+        <span class="nm">strncpy</span>(s-&gt;id, id, ID_LEN - 1);  s-&gt;id[ID_LEN - 1] = '\0';
+        s-&gt;type = type;  s-&gt;priority = prio;  s-&gt;lastReport = t;
+        s-&gt;next = p-&gt;next;  p-&gt;next = s;
+        count++;  typeCount[type]++;
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }</pre>
+        <p class="dim mono mt-s" style="font-size:12px">源码 · gateway.cpp · DeviceList::Register()</p>
       </div>
       <div>
         <div class="log"><span class="hd">依次注册 6 台设备后的遍历输出</span>
@@ -984,15 +986,20 @@ count++;             <span class="cmt">// 维护总数</span>
         </ul>
       </div>
     </div>
-    <pre class="code cmp mt-m"><span class="cmt">// 第一步：主栈 → 辅助栈，弹出次序被反转</span>
-<span class="kw">while</span> (!mainStack.Empty())  auxStack.Push(mainStack.Pop());
-
-<span class="cmt">// 第二步：辅助栈逐个弹出输出，同时压回主栈（栈序复原）</span>
-<span class="kw">while</span> (!auxStack.Empty()) {
-    Command c = auxStack.Top();
-    <span class="nm">Print</span>(c);                 <span class="cmt">// 输出：栈底 → 栈顶</span>
-    mainStack.Push(auxStack.Pop());
-}                            <span class="cmt">// 结束：主栈元素与顺序完全复原</span></pre>
+    <pre class="code cmp mt-m">    <span class="cmt">// 查看历史：借辅助栈两轮倒换输出，结束后恢复原栈</span>
+    <span class="kw">void</span> <span class="nm">ShowHistory</span>() {
+        <span class="kw">if</span> (top == NULL) { cout &lt;&lt; "  当前无指令记录。" &lt;&lt; endl; <span class="kw">return</span>; }
+        CommandStack aux;
+        Command c;
+        <span class="kw">while</span> (<span class="nm">Pop</span>(c)) aux.<span class="nm">Push</span>(c);
+        cout &lt;&lt; "  指令历史（栈底→栈顶）：" &lt;&lt; endl;
+        <span class="kw">while</span> (aux.<span class="nm">Pop</span>(c)) {
+            <span class="nm">printf</span>("  指令#%d  目标=%s  内容=%s  下发时间=%lld\n",
+                   c.no, c.targetId, c.content, c.time);
+            <span class="nm">Push</span>(c);
+        }
+    }</pre>
+    <p class="dim mono mt-s" style="font-size:12px">源码 · gateway.cpp · CommandStack::ShowHistory()</p>
     <div class="deck-footer"><span class="dim2">模块2 · 查看指令历史</span><span class="slide-number" data-current="11" data-total="17"></span></div>
     <div class="notes">这是模块二最有意思的一个点。题目要求“在不破坏栈结构的前提下”输出从栈底到栈顶的全部指令。如果直接反复弹栈输出，指令就全丢了。我用了任务书提示的辅助栈方法：先把主栈全部弹进辅助栈，次序就反过来了；再从辅助栈逐个弹出输出，同时压回主栈，两轮之后主栈完全复原。递归也能做，但指令多的时候有递归过深的风险，所以选了辅助栈。</div>
   </section>
@@ -1044,21 +1051,33 @@ count++;             <span class="cmt">// 维护总数</span>
     <h2 class="h2">队满时：先丢弃最旧，再让新数据入队</h2>
     <div class="grid g2 mt-m anim-fade-up" data-anim="fade-up" style="grid-template-columns:1fr 1fr;align-items:start">
       <div>
-        <pre class="code cmp"><span class="kw">bool</span> <span class="nm">EnQueue</span>(DataPacket p) {
-    <span class="kw">bool</span> dropped = <span class="kw">false</span>;
-    <span class="kw">if</span> (count == MAX) {          <span class="cmt">// ① 队满：先出队丢弃最旧</span>
-        dropped = <span class="kw">true</span>;
-        DataPacket old = data[front];
-        front = (front + 1) % MAX;
-        count--;
-        <span class="nm">PrintDiscard</span>(old);      <span class="cmt">// 提示被丢弃的数据</span>
-    }                            <span class="cmt">// ② 计数器腾出一格后再入队</span>
-    data[rear] = p;
-    rear = (rear + 1) % MAX;
-    count++;
-    <span class="kw">return</span> dropped;             <span class="cmt">// 调用方据此提示“已丢弃最旧”</span>
-}</pre>
-        <p class="dim mt-m" style="font-size:14px">顺序不能颠倒：先判断、先出队，再入队 —— 否则新数据会越界覆盖，旧数据的序列号也会丢失。</p>
+        <pre class="code cmp">    <span class="kw">bool</span> <span class="nm">EnQueue</span>(<span class="kw">const</span> DataPacket&amp; p, DataPacket* dropped = NULL) {
+        <span class="kw">if</span> (<span class="nm">Full</span>()) { <span class="cmt">// 队满：先出队丢弃最旧，再入队</span>
+            <span class="kw">if</span> (dropped != NULL) *dropped = data[front];
+            front = (front + 1) % QUEUE_CAP;
+            count--;
+        }
+        data[rear] = p;
+        rear = (rear + 1) % QUEUE_CAP;
+        count++;
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
+
+        <span class="cmt">// ── 以下为 cacheMenu() 中「恢复网络并补传」分支的源码（节选） ──</span>
+            networkUp = <span class="kw">true</span>;
+            cout &lt;&lt; "  [网络] 网络已恢复，开始按FIFO顺序补传缓存数据：" &lt;&lt; endl;
+            <span class="kw">if</span> (cache.<span class="nm">Empty</span>())
+                cout &lt;&lt; "  无需补传：缓存队列为空。" &lt;&lt; endl;
+            DataPacket p;
+            <span class="kw">int</span> n = 0;
+            <span class="kw">while</span> (cache.<span class="nm">DeQueue</span>(p)) {
+                n++;
+                <span class="nm">printf</span>("  [补传%d] 序列号=%d 设备=%s 值=%.2f 采集时间=%lld\n",
+                       n, p.seq, p.deviceId, p.value, p.time);
+            }
+            <span class="kw">if</span> (n &gt; 0) cout &lt;&lt; "  补传完成，共补传 " &lt;&lt; n &lt;&lt; " 条数据。" &lt;&lt; endl;
+        }</pre>
+        <p class="dim mt-m" style="font-size:14px"><span class="mono">源码 · gateway.cpp · CircularQueue::EnQueue() 与网络恢复补传循环</span> —— 顺序不能颠倒：先判断、先出队，再入队，否则新数据会越界覆盖，旧数据的序列号也会丢失；下附补传循环则按 FIFO 逐条出队，与入队逻辑首尾呼应。</p>
       </div>
       <div>
         <div class="log"><span class="hd">真实运行输出（节选）</span>
