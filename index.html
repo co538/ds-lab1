@@ -725,7 +725,7 @@ html,body{overflow:hidden}
       </div>
       <div class="deck-footer">
         <span class="cover-meta"><span>自动化学院</span><span>学号 08025312</span><span>姓名 方益凡</span></span>
-        <span class="slide-number" data-current="1" data-total="24"></span>
+        <span class="slide-number" data-current="1" data-total="23"></span>
       </div>
     </div>
     <div class="notes">各位老师、同学好。我这次实验的题目是《工业物联网边缘网关的传感器数据缓存与指令调度》。一句话点题：我用数据结构模拟了边缘网关的三个核心模块——设备管理、指令撤销和数据缓存，并且按要求禁用了 STL，链表、栈、队列全部是自己定义、自己实现的。</div>
@@ -734,20 +734,19 @@ html,body{overflow:hidden}
   <!-- ============ 2 目录 ============ -->
   <section class="slide compact" data-deck-label="目录">
     <p class="kicker">Contents · 目录</p>
-    <h2 class="h2">今天讲四件事，末尾附上完整源码</h2>
+    <h2 class="h2">今天讲四件事</h2>
     <div class="grid g2 mt-l anim-stagger-list" data-anim-target>
       <div class="card"><div class="row" style="align-items:flex-start"><div class="num">1</div><div>
         <h4>背景、目标与结构选型</h4><p class="dim">网关面临哪三个工程问题，各自该用什么线性结构。</p></div></div></div>
       <div class="card"><div class="row" style="align-items:flex-start"><div class="num">2</div><div>
-        <h4>三个核心模块的实现</h4><p class="dim">有序单链表管设备、链式栈管撤销、循环队列管缓存。</p></div></div></div>
+        <h4>三个核心模块的实现</h4><p class="dim">有序单链表管设备、链式栈管撤销、循环队列管缓存，每个模块都展开关键源码。</p></div></div></div>
       <div class="card"><div class="row" style="align-items:flex-start"><div class="num">3</div><div>
         <h4>复杂度分析与改进思路</h4><p class="dim">各操作的时空代价在哪里，瓶颈怎么破。</p></div></div></div>
       <div class="card"><div class="row" style="align-items:flex-start"><div class="num">4</div><div>
         <h4>思考题与总结</h4><p class="dim">工业场景为什么常用循环队列而不是链式队列。</p></div></div></div>
     </div>
-    <p class="dim mt-l" style="font-size:15.5px"><b>附录（第 18～23 页）：完整源代码精读</b> —— 按源文件顺序展示 gateway.cpp 的三个结点结构与全部方法，行内注释与旁注一并给出。</p>
-    <div class="deck-footer"><span class="dim2">数据结构实验一</span><span class="slide-number" data-current="2" data-total="24"></span></div>
-    <div class="notes">汇报分四部分：先讲背景和结构选型，再逐个模块展开实现细节，然后是复杂度分析，最后回答思考题并总结。最后几页是附录，把完整的源代码过一遍，如果老师想看某一个函数的实现，可以直接跳过去。</div>
+    <div class="deck-footer"><span class="dim2">数据结构实验一</span><span class="slide-number" data-current="2" data-total="23"></span></div>
+    <div class="notes">汇报分四部分：先讲背景和结构选型，再逐个模块展开实现细节，然后是复杂度分析，最后回答思考题并总结。讲每个模块时，除了思路还会把关键的源码片段展开看一遍，如果老师想看某个函数的实现，可以直接翻到对应的页。</div>
   </section>
 
   <!-- ============ 3 小节页 一 ============ -->
@@ -784,7 +783,7 @@ html,body{overflow:hidden}
         <p class="lede" style="font-size:17px;margin:4px 0 0">同一个网关的三个问题，特征完全不同，因此需要三种不同的线性结构。</p>
       </div>
     </div>
-    <div class="deck-footer"><span class="dim2">背景</span><span class="slide-number" data-current="4" data-total="24"></span></div>
+    <div class="deck-footer"><span class="dim2">背景</span><span class="slide-number" data-current="4" data-total="23"></span></div>
     <div class="notes">左边这张图就是问题的来龙去脉：左边是传感器，中间是边缘网关，右边是云端。网关要面对三件事：设备要管得住、断网数据要存得下、指令发错了要能撤回来。这三件事的特征完全不一样，所以要选不同的结构。</div>
   </section>
 
@@ -802,7 +801,7 @@ html,body{overflow:hidden}
       <div class="card card-accent"><h4>④ 建模能力</h4>
         <p class="dim" style="margin:0;font-size:15px">培养把工程问题抽象成数据结构模型的能力 —— 这是本次实验最核心的目标。</p></div>
     </div>
-    <div class="deck-footer"><span class="dim2">实验目标</span><span class="slide-number" data-current="5" data-total="24"></span></div>
+    <div class="deck-footer"><span class="dim2">实验目标</span><span class="slide-number" data-current="5" data-total="23"></span></div>
     <div class="notes">这四条目标里，前三条是教材上的基本要求，第四条“把工程问题抽象成数据结构模型”是我觉得最关键的——后面每一页其实都在做这件事：先看问题的特征，再决定用哪个结构。</div>
   </section>
 
@@ -826,11 +825,66 @@ html,body{overflow:hidden}
       </table>
     </div>
     <p class="lede mt-l" style="font-size:18px">结构选型由问题特征决定 —— 不是随便挑一个，而是问题本身限定了最优解。</p>
-    <div class="deck-footer"><span class="dim2">整体设计</span><span class="slide-number" data-current="6" data-total="24"></span></div>
+    <div class="deck-footer"><span class="dim2">整体设计</span><span class="slide-number" data-current="6" data-total="23"></span></div>
     <div class="notes">这张表是整体设计的关键。请注意“问题特征”这一列：设备管理要“有序”，所以用有序链表；指令撤销是“后进先出”，所以用栈；数据缓存是“先进先出且有上限”，所以用循环队列。选型的依据是问题特征，不是随便挑的。</div>
   </section>
 
-  <!-- ============ 7 小节页 二 ============ -->
+  <!-- ============ 7 整体设计 全局与主程序 ============ -->
+  <section class="slide compact" data-deck-label="整体设计 全局与主程序">
+    <p class="kicker">Overall Design · 整体设计</p>
+    <h2 class="h2">全局定义与主程序：菜单调度</h2>
+    <div class="grid g2 mt-m" style="grid-template-columns:1fr 1.15fr;align-items:start;gap:20px">
+        <div class="stack" style="gap:18px">
+          <div>
+            <pre class="code cmp"><span class="kw">const</span> <span class="kw">int</span> QUEUE_CAP = 50;
+<span class="kw">const</span> <span class="kw">int</span> ID_LEN    = 20;
+<span class="kw">const</span> <span class="kw">int</span> CMD_LEN   = 64;
+
+<span class="kw">enum</span> DeviceType { DEV_TEMP = 0, DEV_PRESS = 1, DEV_VIB = 2 };
+<span class="kw">const</span> <span class="kw">char</span>* <span class="nm">TYPE_NAME</span>[3] = { "温度", "压力", "振动" };</pre>
+            <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · 容量上限、设备类型枚举与中文名对照表</p>
+          </div>
+          <div>
+            <pre class="code cmp"><span class="kw">void</span> <span class="nm">showMainMenu</span>() {
+    cout &lt;&lt; "\n========= 工业物联网边缘网关模拟系统 =========" &lt;&lt; endl;
+    cout &lt;&lt; "  1. 设备管理    2. 指令管理    3. 数据缓存" &lt;&lt; endl;
+    cout &lt;&lt; "  0. 退出系统" &lt;&lt; endl;
+    cout &lt;&lt; "----------------------------------------------" &lt;&lt; endl;
+    cout &lt;&lt; "请选择: ";
+}</pre>
+            <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · showMainMenu() 主菜单</p>
+          </div>
+        </div>
+        <div class="stack" style="gap:18px">
+          <div>
+            <pre class="code cmp"><span class="kw">int</span> <span class="nm">main</span>() {
+<span <span class="kw">class</span>="kw">#ifdef</span> _WIN32
+    <span class="nm">SetConsoleOutputCP</span>(65001);   <span class="cmt">// 让控制台用UTF-8输出，不然中文是乱码</span>
+<span <span class="kw">class</span>="kw">#endif</span>
+    <span class="kw">int</span> choice;
+    <span class="kw">while</span> (<span class="kw">true</span>) {
+        <span class="nm">showMainMenu</span>();
+        <span class="kw">if</span> (!(cin &gt;&gt; choice)) <span class="kw">break</span>;
+        <span class="kw">if</span> (choice == 0) <span class="kw">break</span>;
+        <span class="kw">switch</span> (choice) {
+            <span class="kw">case</span> 1: <span class="nm">deviceMenu</span>(); <span class="kw">break</span>;
+            <span class="kw">case</span> 2: <span class="nm">cmdMenu</span>();    <span class="kw">break</span>;
+            <span class="kw">case</span> 3: <span class="nm">cacheMenu</span>();  <span class="kw">break</span>;
+            <span class="kw">default</span>: cout &lt;&lt; "  无效选项，请重新选择！" &lt;&lt; endl;
+        }
+    }
+    cout &lt;&lt; "系统已退出，再见！" &lt;&lt; endl;
+    <span class="kw">return</span> 0;
+}</pre>
+            <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · main() 主循环</p>
+          </div>
+        </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">整体设计 · 全局定义与主程序</span><span class="slide-number" data-current="7" data-total="23"></span></div>
+    <div class="notes">整体设计里有两个东西要先交代。第一是全局定义：队列容量 50、ID 和指令内容的长度上限，以及设备类型的枚举和它的中文名对照表——因为要按类型统计，枚举值就直接当数组下标用。第二是主程序：main 里是一个 while 主循环，打印菜单、读一个选项，输入 0 或者输入流结束就退出，否则用 switch 分发到 deviceMenu、cmdMenu、cacheMenu 三个子菜单。三个子菜单结构一样，都是 while 加 cin，选 0 就 return 回主菜单。另外开头这几行是 Windows 平台专用的：控制台默认 GBK 编码，而源程序里的中文字符串是 UTF-8，所以先把输出代码页设成 65001，中文才不会乱码。</div>
+  </section>
+
+  <!-- ============ 8 小节页 二 ============ -->
   <section class="slide center tc dv" data-deck-label="小节 二">
     <div style="max-width:900px;margin:0 auto">
       <p class="kicker anim-fade-down" data-anim="fade-down">Section · 02</p>
@@ -841,7 +895,7 @@ html,body{overflow:hidden}
     <div class="notes">下面逐个模块展开，每个模块先讲设计，再讲核心代码和实际测试输出。</div>
   </section>
 
-  <!-- ============ 8 模块1 设计 ============ -->
+  <!-- ============ 9 模块1 设计 ============ -->
   <section class="slide compact" data-deck-label="模块1 设计">
     <p class="kicker">Module 1 · 在线设备管理</p>
     <h2 class="h2">设备结点与有序规则</h2>
@@ -872,11 +926,11 @@ html,body{overflow:hidden}
         </div>
       </div>
     </div>
-    <div class="deck-footer"><span class="dim2">模块1 · 在线设备管理</span><span class="slide-number" data-current="8" data-total="24"></span></div>
+    <div class="deck-footer"><span class="dim2">模块1 · 在线设备管理</span><span class="slide-number" data-current="9" data-total="23"></span></div>
     <div class="notes">模块一的结点一共四个字段。这里的关键是排序规则：两个关键字，优先级优先，优先级相同再看设备ID的字典序。为什么要用带头结点的单链表？因为插入时我们要定位到新结点的前驱，头结点可以让“插到最前面”和“插到中间”两种情况统一处理，不用特判。</div>
   </section>
 
-  <!-- ============ 9 模块1 实现与测试 ============ -->
+  <!-- ============ 10 模块1 实现与测试 ============ -->
   <section class="slide compact" data-deck-label="模块1 实现与测试">
     <p class="kicker">Module 1 · 核心实现与测试</p>
     <h2 class="h2">插入即有序：一次扫描找到插入点</h2>
@@ -921,11 +975,102 @@ html,body{overflow:hidden}
         <p class="dim mt-m" style="font-size:14px">优先级相同的 T001 / T003 / V001 严格按 ID 字典序排列，证明双关键字插入正确。</p>
       </div>
     </div>
-    <div class="deck-footer"><span class="dim2">模块1 · 核心实现与测试</span><span class="slide-number" data-current="9" data-total="24"></span></div>
+    <div class="deck-footer"><span class="dim2">模块1 · 核心实现与测试</span><span class="slide-number" data-current="10" data-total="23"></span></div>
     <div class="notes">核心就这个 while 循环：从表头开始扫，只要当前结点应该排在新结点前面，就继续往后走；一旦遇到不该排在前面（也就是应该排在新结点之后）的结点，就停在它前面插入。右边是实际运行输出：注意第 3、4、5 行，三台设备优先级都是 3，ID 是 T001、T003、V001，严格按字典序排列，说明双关键字比较是对的。</div>
   </section>
 
-  <!-- ============ 10 模块2 设计 ============ -->
+  <!-- ============ 11 模块1 结点维护源码 ============ -->
+  <section class="slide compact" data-deck-label="模块1 结点维护源码">
+    <p class="kicker">Module 1 · 结点维护源码</p>
+    <h2 class="h2">注销与查找：摘链改指针，查找只读不改</h2>
+    <div class="grid g2 mt-m" style="grid-template-columns:1fr 1.2fr;align-items:start;gap:20px">
+        <div class="stack" style="gap:18px">
+          <div>
+            <pre class="code cmp"><span class="kw">class</span> <span class="nm">DeviceList</span> {
+    Device* head;
+    <span class="kw">int</span>     count;
+    <span class="kw">int</span>     typeCount[3];
+
+<span class="kw">public</span>:
+    <span class="nm">DeviceList</span>() {
+        head  = <span class="kw">new</span> Device;
+        head-&gt;next = <span class="kw">NULL</span>;
+        count = 0;
+        typeCount[0] = typeCount[1] = typeCount[2] = 0;
+    }
+    ~<span class="nm">DeviceList</span>() {
+        Device* p = head;
+        <span class="kw">while</span> (p) { Device* q = p-&gt;next; <span class="kw">delete</span> p; p = q; }
+    }</pre>
+            <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · DeviceList 成员变量、构造函数与析构函数</p>
+          </div>
+        </div>
+        <div class="stack" style="gap:18px">
+          <div>
+            <pre class="code cmp">    <span class="kw">bool</span> <span class="nm">Remove</span>(<span class="kw">const</span> <span class="kw">char</span>* id) {
+        Device* p = head;
+        <span class="kw">while</span> (p-&gt;next != <span class="kw">NULL</span> &amp;&amp; <span class="nm">strcmp</span>(p-&gt;next-&gt;id, id) != 0)
+            p = p-&gt;next;
+        <span class="kw">if</span> (p-&gt;next == <span class="kw">NULL</span>) <span class="kw">return</span> <span class="kw">false</span>;
+        Device* q = p-&gt;next;
+        p-&gt;next = q-&gt;next;
+        count--;  typeCount[q-&gt;type]--;
+        <span class="kw">delete</span> q;
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
+
+    Device* <span class="nm">Find</span>(<span class="kw">const</span> <span class="kw">char</span>* id) {
+        Device* p = head-&gt;next;
+        <span class="kw">while</span> (p != <span class="kw">NULL</span> &amp;&amp; <span class="nm">strcmp</span>(p-&gt;id, id) != 0) p = p-&gt;next;
+        <span class="kw">return</span> p;
+    }</pre>
+            <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · DeviceList::Remove() 与 Find()</p>
+          </div>
+        </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">模块1 · 注销与查找源码</span><span class="slide-number" data-current="11" data-total="23"></span></div>
+    <div class="notes">这段是链表结点的维护代码。构造函数只做一件事：new 出一个头结点，它不存数据，作用是把"插在第一个位置"和"插在中间"统一处理，不用特判。析构函数顺着 next 一路释放，先记住下一个结点再删当前结点，避免删完找不到后继。注销时先找到待删结点的前驱，再改指针把它摘下来，同时把设备总数和对应类型的计数都减一——这两个计数器就是统计功能 O(1) 的来源。查找只读不改结构，从第一个数据结点开始按设备ID逐个比对，找不到返回空指针。</div>
+  </section>
+
+  <!-- ============ 12 模块1 遍历与统计源码 ============ -->
+  <section class="slide compact" data-deck-label="模块1 遍历与统计源码">
+    <p class="kicker">Module 1 · 遍历与统计源码</p>
+    <h2 class="h2">遍历与统计：顺链输出，统计读计数器</h2>
+    <div class="grid g2 mt-m" style="grid-template-columns:1.25fr 1fr;align-items:start;gap:20px">
+        <div class="stack" style="gap:18px">
+          <div>
+            <pre class="code cmp">    <span class="kw">void</span> <span class="nm">Traverse</span>() <span class="kw">const</span> {
+        <span class="kw">if</span> (count == 0) { cout &lt;&lt; "  当前无在线设备。" &lt;&lt; endl; <span class="kw">return</span>; }
+        cout &lt;&lt; "  序号    优先级    设备ID    类型    最近上报" &lt;&lt; endl;
+        Device* p = head-&gt;next;
+        <span class="kw">int</span> i = 1;
+        <span class="kw">while</span> (p != <span class="kw">NULL</span>) {
+            cout &lt;&lt; "  " &lt;&lt; i++ &lt;&lt; "    " &lt;&lt; p-&gt;priority &lt;&lt; "    " &lt;&lt; p-&gt;id
+                 &lt;&lt; "    " &lt;&lt; <span class="nm">TYPE_NAME</span>[p-&gt;type] &lt;&lt; "    " &lt;&lt; p-&gt;lastReport &lt;&lt; endl;
+            p = p-&gt;next;
+        }
+    }</pre>
+            <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · DeviceList::Traverse() 按优先级顺序输出</p>
+          </div>
+        </div>
+        <div class="stack" style="gap:18px">
+          <div>
+            <pre class="code cmp">    <span class="kw">void</span> <span class="nm">Statistic</span>() <span class="kw">const</span> {
+        cout &lt;&lt; "  在线设备总数：" &lt;&lt; count &lt;&lt; endl;
+        <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; 3; i++)
+            cout &lt;&lt; "  " &lt;&lt; <span class="nm">TYPE_NAME</span>[i] &lt;&lt; "设备数量：" &lt;&lt; typeCount[i] &lt;&lt; endl;
+    }
+
+    <span class="kw">int</span> <span class="nm">Size</span>() <span class="kw">const</span> { <span class="kw">return</span> count; }</pre>
+            <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · DeviceList::Statistic() 与 Size()</p>
+          </div>
+        </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">模块1 · 遍历与统计源码</span><span class="slide-number" data-current="12" data-total="23"></span></div>
+    <div class="notes">遍历能直接输出优先级顺序，是因为链表在注册时就按"优先级升序、同级按设备ID字典序"插好了，遍历不需要再排序，顺链走一遍就是目标顺序，代价 O(n)。输出时序号用 i++ 递增，各列之间用空格分开。统计这边总数直接取 count，三类数量直接取 typeCount 数组，这两个变量在注册和注销时就同步维护好了，所以统计不用再遍历链表，是 O(1)。</div>
+  </section>
+
+  <!-- ============ 13 模块2 设计 ============ -->
   <section class="slide compact" data-deck-label="模块2 设计">
     <p class="kicker">Module 2 · 控制指令撤销</p>
     <h2 class="h2">链式栈：栈顶就是最近下发的指令</h2>
@@ -940,9 +1085,16 @@ html,body{overflow:hidden}
         <p class="dim mt-m" style="font-size:14px">压栈用头插法，出栈删首结点 —— 两个操作都是 O(1)。</p>
       </div>
       <div class="stack">
-        <div class="card card-accent">
-          <h4 style="margin:0 0 6px">指令结点</h4>
-          <p class="dim mono" style="margin:0;font-size:13.5px">编号（自增整数）· 目标设备ID · 指令内容 · 下发时间戳</p>
+        <div>
+          <pre class="code cmp"><span class="cmt">// 链式栈：管理控制指令</span>
+<span class="kw">struct</span> Command {
+    <span class="kw">int</span>       no;
+    <span class="kw">char</span>      targetId[ID_LEN];
+    <span class="kw">char</span>      content[CMD_LEN];
+    <span class="kw">long</span> <span class="kw">long</span> time;
+    Command*  next;
+};</pre>
+          <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · 指令结点</p>
         </div>
         <div class="card">
           <h4 style="margin:0 0 10px">五个操作</h4>
@@ -957,11 +1109,11 @@ html,body{overflow:hidden}
         </div>
       </div>
     </div>
-    <div class="deck-footer"><span class="dim2">模块2 · 控制指令撤销</span><span class="slide-number" data-current="10" data-total="24"></span></div>
-    <div class="notes">模块二用链式栈。左边是栈的示意：栈底是最早下发的指令 1，栈顶是最近的指令 5。“撤销最近”就是弹栈，天然就是 O(1)。选链式栈而不是顺序栈，是因为指令条数事先不知道，链式结构按需分配，不用担心溢出。</div>
+    <div class="deck-footer"><span class="dim2">模块2 · 控制指令撤销</span><span class="slide-number" data-current="13" data-total="23"></span></div>
+    <div class="notes">模块二用链式栈。左边是栈的示意：栈底是最早下发的指令 1，栈顶是最近的指令 5。“撤销最近”就是弹栈，天然就是 O(1)。选链式栈而不是顺序栈，是因为指令条数事先不知道，链式结构按需分配，不用担心溢出。右上角是结点定义的真实源码：编号、目标设备、指令内容、下发时间戳，再加一个指向栈顶方向的 next 指针。</div>
   </section>
 
-  <!-- ============ 11 模块2 历史 ============ -->
+  <!-- ============ 14 模块2 历史 ============ -->
   <section class="slide compact" data-deck-label="模块2 查看历史">
     <p class="kicker">Module 2 · 关键难点</p>
     <h2 class="h2">不破坏栈结构，输出栈底 → 栈顶</h2>
@@ -999,11 +1151,61 @@ html,body{overflow:hidden}
         }
     }</pre>
     <p class="dim mono mt-s" style="font-size:12px">源码 · gateway.cpp · CommandStack::ShowHistory()</p>
-    <div class="deck-footer"><span class="dim2">模块2 · 查看指令历史</span><span class="slide-number" data-current="11" data-total="24"></span></div>
+    <div class="deck-footer"><span class="dim2">模块2 · 查看指令历史</span><span class="slide-number" data-current="14" data-total="23"></span></div>
     <div class="notes">这是模块二最有意思的一个点。题目要求“在不破坏栈结构的前提下”输出从栈底到栈顶的全部指令。如果直接反复弹栈输出，指令就全丢了。我用了任务书提示的辅助栈方法：先把主栈全部弹进辅助栈，次序就反过来了；再从辅助栈逐个弹出输出，同时压回主栈，两轮之后主栈完全复原。递归也能做，但指令多的时候有递归过深的风险，所以选了辅助栈。</div>
   </section>
 
-  <!-- ============ 12 模块3 设计 ============ -->
+  <!-- ============ 15 模块2 栈操作源码 ============ -->
+  <section class="slide compact" data-deck-label="模块2 栈操作源码">
+    <p class="kicker">Module 2 · 栈操作源码</p>
+    <h2 class="h2">压栈、弹栈、读栈顶与清空</h2>
+    <div class="grid g2 mt-m" style="grid-template-columns:1.15fr 1fr;align-items:start;gap:20px">
+        <div class="stack" style="gap:18px">
+          <div>
+            <pre class="code cmp">    <span class="kw">void</span> <span class="nm">Push</span>(<span class="kw">const</span> Command&amp; c) {
+        Command* s = <span class="kw">new</span> Command;
+        *s = c;
+        s-&gt;next = top;
+        top = s;
+        count++;
+    }
+
+    <span class="kw">bool</span> <span class="nm">Pop</span>(Command&amp; c) {
+        <span class="kw">if</span> (top == <span class="kw">NULL</span>) <span class="kw">return</span> <span class="kw">false</span>;
+        c = *top;
+        Command* p = top;
+        top = top-&gt;next;
+        <span class="kw">delete</span> p;
+        count--;
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }</pre>
+            <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · CommandStack::Push() 与 Pop()</p>
+          </div>
+        </div>
+        <div class="stack" style="gap:18px">
+          <div>
+            <pre class="code cmp">    <span class="kw">bool</span> <span class="nm">GetTop</span>(Command&amp; c) <span class="kw">const</span> {
+        <span class="kw">if</span> (top == <span class="kw">NULL</span>) <span class="kw">return</span> <span class="kw">false</span>;
+        c = *top;
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
+
+    <span class="kw">void</span> <span class="nm">Clear</span>(<span class="kw">bool</span> echo = <span class="kw">true</span>) {
+        Command c;
+        <span class="kw">while</span> (<span class="nm">Pop</span>(c))
+            <span class="kw">if</span> (echo)
+                cout &lt;&lt; "  [撤销] 指令编号：" &lt;&lt; c.no &lt;&lt; "    目标设备：" &lt;&lt; c.targetId
+                     &lt;&lt; "    内容：" &lt;&lt; c.content &lt;&lt; "    下发时间：" &lt;&lt; c.time &lt;&lt; endl;
+    }</pre>
+            <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · CommandStack::GetTop() 与 Clear()</p>
+          </div>
+        </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">模块2 · 栈的基本操作源码</span><span class="slide-number" data-current="15" data-total="23"></span></div>
+    <div class="notes">栈的四个基本操作。压栈用头插法：新结点接到 top 前面，自己成为新的栈顶，所以"下发指令"是 O(1)；弹栈就是删掉第一个结点，先把内容拷贝出来再删，这样"撤销最近"才能打印出被撤销指令的完整信息。读栈顶只复制内容、不动栈，对应"查看最近指令"。清空是 while 循环反复弹栈直到空，echo 参数是为了复用：撤销全部时把每条指令都打印出来，析构对象时不需要打印。至于"不破坏栈结构查看全部历史"，用的是辅助栈两轮倒换，前面一页已经单独展开过。</div>
+  </section>
+
+  <!-- ============ 16 模块3 设计 ============ -->
   <section class="slide compact" data-deck-label="模块3 设计">
     <p class="kicker">Module 3 · 传感器数据缓存</p>
     <h2 class="h2">循环队列：容量 50，取模回绕</h2>
@@ -1023,9 +1225,15 @@ html,body{overflow:hidden}
         <p class="dim mt-s" style="font-size:14px"><b>为什么用 count 计数器？</b>只用 front 和 rear 时，队满与队空的判断条件相同，会出现歧义；加一个 count 后，count = 0 即空、count = 50 即满，彻底消除二义性。</p>
       </div>
       <div class="stack">
-        <div class="card card-accent">
-          <h4 style="margin:0 0 6px">数据包</h4>
-          <p class="dim mono" style="margin:0;font-size:13.5px">序列号（自增）· 设备ID · 数据值（浮点）· 采集时间戳</p>
+        <div>
+          <pre class="code cmp"><span class="cmt">// 循环队列：缓存数据包，用count记个数，0空50满</span>
+<span class="kw">struct</span> DataPacket {
+    <span class="kw">int</span>       seq;
+    <span class="kw">char</span>      deviceId[ID_LEN];
+    <span class="kw">double</span>    value;
+    <span class="kw">long</span> <span class="kw">long</span> time;
+};</pre>
+          <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · 数据包元素</p>
         </div>
         <div class="card">
           <h4 style="margin:0 0 8px">按网络状态分流</h4>
@@ -1036,15 +1244,15 @@ html,body{overflow:hidden}
             <b>缓存已满</b> → 自动丢弃最旧数据</p>
         </div>
         <div class="card card-soft">
-          <p class="dim" style="margin:0;font-size:14px">容量上限 50 是题目给定的硬约束，正好用定长数组一次分配到位。</p>
+          <p class="dim" style="margin:0;font-size:14px">容量上限 50 是题目给定的硬约束，正好用定长数组一次分配到位。右上角是数据包的真实定义：序列号、设备ID、数据值、采集时间戳四个字段。</p>
         </div>
       </div>
     </div>
-    <div class="deck-footer"><span class="dim2">模块3 · 数据缓存与补传</span><span class="slide-number" data-current="12" data-total="24"></span></div>
+    <div class="deck-footer"><span class="dim2">模块3 · 数据缓存与补传</span><span class="slide-number" data-current="16" data-total="23"></span></div>
     <div class="notes">模块三是循环队列，容量 50。图上标了三个东西：front、rear 和 count。这里有个细节：如果只用 front 和 rear 两个下标，队满和队空的判断条件是一样的，没法区分，所以我加了一个 count 计数器，count 等于 0 就是空，等于 50 就是满，歧义就消除了。右边是三种网络状态下的分流规则。</div>
   </section>
 
-  <!-- ============ 13 模块3 实现与测试 ============ -->
+  <!-- ============ 17 模块3 实现与测试 ============ -->
   <section class="slide compact" data-deck-label="模块3 实现与测试">
     <p class="kicker">Module 3 · 核心实现与测试</p>
     <h2 class="h2">队满时：先丢弃最旧，再让新数据入队</h2>
@@ -1097,11 +1305,117 @@ html,body{overflow:hidden}
         <p class="dim mt-m" style="font-size:14px">连续接收 55 条后，序列号 6~10 被依次丢弃，缓存稳定在 50/50，补传时起点正好是序列号 11。</p>
       </div>
     </div>
-    <div class="deck-footer"><span class="dim2">模块3 · 核心实现与测试</span><span class="slide-number" data-current="13" data-total="24"></span></div>
+    <div class="deck-footer"><span class="dim2">模块3 · 核心实现与测试</span><span class="slide-number" data-current="17" data-total="23"></span></div>
     <div class="notes">这是入队的核心逻辑，顺序很关键：先判断队满，满了就先出队把最旧的丢掉、count 减一，腾出一格，然后再把新数据写进 rear 的位置。如果颠倒了顺序——先写再判断——新数据就会越界覆盖，旧数据的序列号也丢了。右边是真实输出：连续收了 55 条，序列号 6 到 10 被依次丢弃，缓存稳定在 50/50，所以恢复后补传的起点正好是序列号 11。</div>
   </section>
 
-  <!-- ============ 14 小节页 三 ============ -->
+  <!-- ============ 18 模块3 队列结构源码 ============ -->
+  <section class="slide compact" data-deck-label="模块3 队列结构源码">
+    <p class="kicker">Module 3 · 队列结构源码</p>
+    <h2 class="h2">循环队列的结构、判空判满与出队</h2>
+    <div class="grid g2 mt-m" style="grid-template-columns:1fr 1fr;align-items:start;gap:20px">
+        <div class="stack" style="gap:18px">
+          <div>
+            <pre class="code cmp"><span class="kw">class</span> <span class="nm">CircularQueue</span> {
+    DataPacket data[QUEUE_CAP];
+    <span class="kw">int</span> front;
+    <span class="kw">int</span> rear;
+    <span class="kw">int</span> count;
+
+<span class="kw">public</span>:
+    <span class="nm">CircularQueue</span>() { front = rear = count = 0; }
+
+    <span class="kw">bool</span> <span class="nm">Full</span>()  <span class="kw">const</span> { <span class="kw">return</span> count == QUEUE_CAP; }
+    <span class="kw">bool</span> <span class="nm">Empty</span>() <span class="kw">const</span> { <span class="kw">return</span> count == 0; }
+    <span class="kw">int</span>  <span class="nm">Size</span>()  <span class="kw">const</span> { <span class="kw">return</span> count; }</pre>
+            <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · CircularQueue 的成员变量、构造与判空判满</p>
+          </div>
+          <div>
+            <pre class="code cmp">    <span class="kw">bool</span> <span class="nm">DeQueue</span>(DataPacket&amp; p) {
+        <span class="kw">if</span> (<span class="nm">Empty</span>()) <span class="kw">return</span> <span class="kw">false</span>;
+        p = data[front];
+        front = (front + 1) % QUEUE_CAP;
+        count--;
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }</pre>
+            <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · CircularQueue::DeQueue() 队头出队</p>
+          </div>
+        </div>
+        <div class="stack" style="gap:18px">
+          <div>
+            <div class="card card-accent">
+              <h4 style="margin:0 0 8px">三个下标成员的分工</h4>
+              <p class="dim" style="margin:0;font-size:14.5px;line-height:1.8">
+                <span class="mono">data[50]</span> —— 一次分配到位的定长数组，循环队列的实体<br>
+                <span class="mono">front</span> —— 队头下标，指向最旧的那个数据包<br>
+                <span class="mono">rear</span> —— 队尾下标，指向下一个可写入的空位<br>
+                <span class="mono">count</span> —— 当前元素个数，0 即空、50 即满</p>
+            </div>
+            <div class="card card-soft mt-m">
+              <p class="dim" style="margin:0;font-size:14.5px;line-height:1.7">
+                只用 front、rear 时，<span class="mono">(rear+1)%50 == front</span> 既可能是队满也可能是队空，判断条件撞车；加上 count 之后，队满队空各有一个唯一条件，二义性彻底消除。</p>
+            </div>
+            <p class="dim mt-s" style="font-size:12.5px">出队取走队头最旧的数据包，并把 front 环形后移一格；入队（前一页）在队满时先把最旧的挤出去再写新数据。</p>
+          </div>
+        </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">模块3 · 队列结构与出队源码</span><span class="slide-number" data-current="18" data-total="23"></span></div>
+    <div class="notes">这是循环队列的结构与出队代码。三个成员分工要记清：data 是定长 50 的数组，front 指向最旧的那个数据包，rear 指向下一个空位，count 记元素个数。为什么要专门加 count？因为只用 front 和 rear 的话，rear 加一回绕等于 front 既可能是满也可能是空，判断条件撞车；有了 count，0 就是空、50 就是满，没有二义性。出队就是把队头那个最旧的数据包取出来，然后 front 环形后移一格、count 减一。</div>
+  </section>
+
+  <!-- ============ 19 模块3 缓存分流源码 ============ -->
+  <section class="slide compact" data-deck-label="模块3 缓存分流源码">
+    <p class="kicker">Module 3 · 缓存分流源码</p>
+    <h2 class="h2">缓存分流：正常直传、中断入队、满则丢弃最旧</h2>
+    <div class="grid g2 mt-m" style="grid-template-columns:1.15fr 1fr;align-items:start;gap:20px">
+        <div class="stack" style="gap:18px">
+          <div>
+            <pre class="code cmp">        } <span class="kw">else</span> <span class="kw">if</span> (op == 2) {
+            DataPacket p;
+            p.seq = nextSeq++;
+            cout &lt;&lt; "输入 设备ID 数据值 采集时间戳: ";
+            cin &gt;&gt; p.deviceId &gt;&gt; p.value &gt;&gt; p.time;
+            p.deviceId[ID_LEN - 1] = '\0';
+            <span class="kw">if</span> (networkUp) {
+                cout &lt;&lt; "  [上传] 序列号：" &lt;&lt; p.seq &lt;&lt; "    设备：" &lt;&lt; p.deviceId
+                     &lt;&lt; "    数据值：" &lt;&lt; fixed &lt;&lt; setprecision(2) &lt;&lt; p.value
+                     &lt;&lt; "    采集时间：" &lt;&lt; p.time &lt;&lt; endl;
+            } <span class="kw">else</span> {
+                DataPacket dropped;
+                <span class="kw">bool</span> overflow = cache.<span class="nm">Full</span>();
+                cache.<span class="nm">EnQueue</span>(p, &amp;dropped);
+                <span class="kw">if</span> (overflow)
+                    cout &lt;&lt; "  [丢弃] 序列号：" &lt;&lt; dropped.seq &lt;&lt; "    设备：" &lt;&lt; dropped.deviceId
+                         &lt;&lt; "    —— 缓存已满，丢弃最旧数据" &lt;&lt; endl;
+                cout &lt;&lt; "  [缓存] 序列号：" &lt;&lt; p.seq &lt;&lt; "    设备：" &lt;&lt; p.deviceId
+                     &lt;&lt; "    数据值：" &lt;&lt; fixed &lt;&lt; setprecision(2) &lt;&lt; p.value
+                     &lt;&lt; "    采集时间：" &lt;&lt; p.time
+                     &lt;&lt; "    已入队（" &lt;&lt; cache.<span class="nm">Size</span>() &lt;&lt; "/" &lt;&lt; QUEUE_CAP &lt;&lt; "）" &lt;&lt; endl;
+            }</pre>
+            <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · cacheMenu() 中「接收一条数据」的分流分支</p>
+          </div>
+        </div>
+        <div class="stack" style="gap:18px">
+          <div>
+            <div class="card card-accent">
+              <h4 style="margin:0 0 8px">三种去向，一次判断</h4>
+              <p class="dim" style="margin:0;font-size:14.5px;line-height:1.8">
+                <b>网络正常</b>（networkUp 为真）→ 直接输出上传日志，不进缓存<br>
+                <b>网络中断</b> → 调用 EnQueue 入队，并打印"已入队（n/50）"<br>
+                <b>入队时已满</b> → 输出"丢弃最旧数据"，被丢弃的那条的序列号一并给出</p>
+            </div>
+            <div class="card card-soft mt-m">
+              <p class="dim" style="margin:0;font-size:14.5px;line-height:1.7">
+                注意顺序：先用 <span class="mono">cache.Full()</span> 把"当时满没满"记进 overflow，再调 EnQueue。因为 EnQueue 内部会把最旧的挤出去，事后再判断就分不清是被挤掉的还是本来就没满。</p>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="deck-footer"><span class="dim2">模块3 · 缓存分流源码</span><span class="slide-number" data-current="19" data-total="23"></span></div>
+    <div class="notes">这是模块三的业务代码：收到一条数据后怎么走。先看网络状态，正常就直接上传、不进缓存；中断才走入队分支。这里有个细节正是实现时踩过的坑：入队之前先用 Full() 记住当时满没满，因为 EnQueue 内部会把最旧的挤出去，事后再判断就分不清到底是被挤掉的还是本来就有空位，日志就会打错。所以先记标志、再入队、最后按标志决定要不要打印"丢弃最旧"。</div>
+  </section>
+
+  <!-- ============ 20 小节页 三 ============ -->
   <section class="slide center tc dv" data-deck-label="小节 三">
     <div style="max-width:900px;margin:0 auto">
       <p class="kicker anim-fade-down" data-anim="fade-down">Section · 03</p>
@@ -1112,7 +1426,7 @@ html,body{overflow:hidden}
     <div class="notes">最后一部分：先把各操作的复杂度捋一遍，找到瓶颈，再回答思考题。</div>
   </section>
 
-  <!-- ============ 15 复杂度分析 ============ -->
+  <!-- ============ 21 复杂度分析 ============ -->
   <section class="slide compact" data-deck-label="复杂度分析">
     <p class="kicker">Complexity · 时空分析</p>
     <h2 class="h2">时间复杂度与优化方向</h2>
@@ -1142,11 +1456,11 @@ html,body{overflow:hidden}
       </table>
     </div>
     <p class="lede mt-m" style="font-size:17px">空间复杂度均为 O(n)；<b>瓶颈集中在设备管理的顺序查找</b>，引入哈希索引后可降到平均 O(1)。</p>
-    <div class="deck-footer"><span class="dim2">复杂度分析</span><span class="slide-number" data-current="15" data-total="24"></span></div>
+    <div class="deck-footer"><span class="dim2">复杂度分析</span><span class="slide-number" data-current="21" data-total="23"></span></div>
     <div class="notes">这张表把全部操作过了一遍。绿色的 O(1) 说明栈和队列的操作已经是理论最优了，不用改。真正的问题是设备管理：注册、注销、查找都要从头扫一遍链表，最坏是 O(n)。改进思路就是加一层哈希索引，把设备 ID 映射到结点位置，查找和判重就能降到平均 O(1)。另外统计也可以优化——在注册和注销的时候顺便维护三个类型计数器，统计就直接读计数，不用再遍历。</div>
   </section>
 
-  <!-- ============ 16 思考题 ============ -->
+  <!-- ============ 22 思考题 ============ -->
   <section class="slide compact" data-deck-label="思考题">
     <p class="kicker">Discussion · 思考题</p>
     <h2 class="h2">工业场景为什么常用循环队列，而不是链式队列？</h2>
@@ -1173,314 +1487,11 @@ html,body{overflow:hidden}
       </div>
     </div>
     <p class="lede mt-l" style="font-size:18px">在容量上限可以预先确定的工业场景中，循环队列在<b>可靠性、性能与实时性</b>上都优于链式队列 —— 这正是它被广泛采用的原因。</p>
-    <div class="deck-footer"><span class="dim2">问题讨论</span><span class="slide-number" data-current="16" data-total="24"></span></div>
+    <div class="deck-footer"><span class="dim2">问题讨论</span><span class="slide-number" data-current="22" data-total="23"></span></div>
     <div class="notes">思考题问的是：工业场景为什么常用循环队列而不是链式队列？提示给了三个角度——内存预分配、缓存友好性、实时性。我按这三个角度回答：第一，循环队列用定长数组一次分配，运行期不再动态申请，没有堆碎片；第二，它的元素在内存里是连续的，访问就是移下标，缓存命中率高，链式队列要靠指针跳，缓存不友好；第三，它的入出队耗时恒定、可预测，满足硬实时要求。另外还有两点补充：定长队列天然就能实现“满则丢最旧”，这正好是传感器数据缓存的需求；而且实现简单，不容易出指针错误。</div>
   </section>
 
-  <!-- ============ 17 小节页 四：源码附录 ============ -->
-  <section class="slide center tc dv" data-deck-label="小节 附录">
-    <div style="max-width:900px;margin:0 auto">
-      <p class="kicker anim-fade-down" data-anim="fade-down">Appendix · 附录</p>
-      <h1 class="h1 anim-rise-in" data-anim="rise-in" style="font-size:96px">完整<span class="gradient-text">源代码</span></h1>
-      <div class="divider-accent" style="margin:26px auto"></div>
-      <p class="lede" style="margin:0 auto">禁用 STL，全部自定义实现；下面按源文件顺序把每个结构、每个操作都过一遍。</p>
-    </div>
-    <div class="notes">答辩常有老师要求"把代码打开看看"。这几页把源程序按文件顺序完整过一遍：先是三个结点结构定义，然后逐个模块的方法，最后是主程序。所有代码都是从 gateway.cpp 里直接取出来的原文，不是伪代码。</div>
-  </section>
-
-  <!-- ============ 18 源码 结点结构 ============ -->
-  <section class="slide compact" data-deck-label="源码 结点结构">
-    <p class="kicker">Appendix · 源码精读 ①</p>
-    <h2 class="h2">全局常量、设备类型与三个结点结构</h2>
-    <div class="grid g2 mt-m" style="grid-template-columns:1fr 1fr;align-items:start;gap:20px">
-        <div>
-          <pre class="code cmp"><span class="kw">const</span> <span class="kw">int</span> QUEUE_CAP = 50;
-<span class="kw">const</span> <span class="kw">int</span> ID_LEN    = 20;
-<span class="kw">const</span> <span class="kw">int</span> CMD_LEN   = 64;
-
-<span class="kw">enum</span> DeviceType { DEV_TEMP = 0, DEV_PRESS = 1, DEV_VIB = 2 };
-<span class="kw">const</span> <span class="kw">char</span>* <span class="nm">TYPE_NAME</span>[3] = { "温度", "压力", "振动" };</pre>
-          <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · 容量上限、设备类型枚举与中文名对照表</p>
-        </div>
-        <div>
-          <pre class="code cmp"><span class="cmt">// 有序单链表：管理在线设备</span>
-<span class="kw">struct</span> Device {
-    <span class="kw">char</span>       id[ID_LEN];
-    DeviceType type;
-    <span class="kw">int</span>        priority;
-    <span class="kw">long</span> <span class="kw">long</span>  lastReport;
-    Device*    next;
-};</pre>
-          <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · 链表结点：一台在线设备</p>
-        </div>
-        <div>
-          <pre class="code cmp"><span class="cmt">// 链式栈：管理控制指令</span>
-<span class="kw">struct</span> Command {
-    <span class="kw">int</span>       no;
-    <span class="kw">char</span>      targetId[ID_LEN];
-    <span class="kw">char</span>      content[CMD_LEN];
-    <span class="kw">long</span> <span class="kw">long</span> time;
-    Command*  next;
-};</pre>
-          <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · 栈结点：一条控制指令</p>
-        </div>
-        <div>
-          <pre class="code cmp"><span class="cmt">// 循环队列：缓存数据包，用count记个数，0空50满</span>
-<span class="kw">struct</span> DataPacket {
-    <span class="kw">int</span>       seq;
-    <span class="kw">char</span>      deviceId[ID_LEN];
-    <span class="kw">double</span>    value;
-    <span class="kw">long</span> <span class="kw">long</span> time;
-};</pre>
-          <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · 队列元素：一个传感器数据包</p>
-        </div>
-    </div>
-    <div class="deck-footer"><span class="dim2">附录 · 结点结构</span><span class="slide-number" data-current="18" data-total="24"></span></div>
-    <div class="notes">先看三种线性结构的结点定义。<b>Device</b> 是链表结点：id 存设备ID、type 是类型、priority 是优先级 1~5、lastReport 是最近上报时间、next 指向下一台设备；<b>Command</b> 是栈结点：no 指令编号、targetId 目标设备、content 指令内容、time 下发时间、next 指向栈顶方向的下一结点；<b>DataPacket</b> 是队列元素：seq 序列号、deviceId 来源设备、value 数据值、time 采集时间。三个结构都用 new/delete 动态申请，没有用 vector、stack、queue 任何 STL 容器。</div>
-  </section>
-
-  <!-- ============ 19 源码 设备管理一 ============ -->
-  <section class="slide compact" data-deck-label="源码 设备管理一">
-    <p class="kicker">Appendix · 源码精读 ②</p>
-    <h2 class="h2">设备管理：构造/析构、注销与查找</h2>
-    <div class="grid g2 mt-m" style="grid-template-columns:1fr 1.2fr;align-items:start;gap:20px">
-        <div>
-          <pre class="code cmp"><span class="kw">class</span> <span class="nm">DeviceList</span> {
-    Device* head;
-    <span class="kw">int</span>     count;
-    <span class="kw">int</span>     typeCount[3];
-
-<span class="kw">public</span>:
-    <span class="nm">DeviceList</span>() {
-        head  = <span class="kw">new</span> Device;
-        head-&gt;next = <span class="kw">NULL</span>;
-        count = 0;
-        typeCount[0] = typeCount[1] = typeCount[2] = 0;
-    }
-    ~<span class="nm">DeviceList</span>() {
-        Device* p = head;
-        <span class="kw">while</span> (p) { Device* q = p-&gt;next; <span class="kw">delete</span> p; p = q; }
-    }</pre>
-          <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · DeviceList 的成员变量、构造函数与析构函数</p>
-        </div>
-        <div>
-          <pre class="code cmp">    <span class="kw">bool</span> <span class="nm">Remove</span>(<span class="kw">const</span> <span class="kw">char</span>* id) {
-        Device* p = head;
-        <span class="kw">while</span> (p-&gt;next != <span class="kw">NULL</span> &amp;&amp; <span class="nm">strcmp</span>(p-&gt;next-&gt;id, id) != 0)
-            p = p-&gt;next;
-        <span class="kw">if</span> (p-&gt;next == <span class="kw">NULL</span>) <span class="kw">return</span> <span class="kw">false</span>;
-        Device* q = p-&gt;next;
-        p-&gt;next = q-&gt;next;
-        count--;  typeCount[q-&gt;type]--;
-        <span class="kw">delete</span> q;
-        <span class="kw">return</span> <span class="kw">true</span>;
-    }
-
-    Device* <span class="nm">Find</span>(<span class="kw">const</span> <span class="kw">char</span>* id) {
-        Device* p = head-&gt;next;
-        <span class="kw">while</span> (p != <span class="kw">NULL</span> &amp;&amp; <span class="nm">strcmp</span>(p-&gt;id, id) != 0) p = p-&gt;next;
-        <span class="kw">return</span> p;
-    }</pre>
-          <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · DeviceList::Remove() 与 Find()</p>
-        </div>
-    </div>
-    <div class="deck-footer"><span class="dim2">附录 · 设备管理（一）</span><span class="slide-number" data-current="19" data-total="24"></span></div>
-    <div class="notes">模块一的核心「按双关键字有序插入」在第 9 页已经看过，这里补上其余操作。构造函数做了一件事：new 出一个头结点，头结点不存数据，它的作用是让"插在第一个位置"和"插在中间"这两种情况用同一段代码处理，不用特判。析构函数顺着 next 一路释放，先存下一个结点再删当前结点，避免删完找不到后继。注销是先找到待删结点的前驱，然后改指针把它摘下来，同时把总数和该类型的计数都减一；查找只读不改结构，从第一个数据结点开始按设备ID逐个比对。</div>
-  </section>
-
-  <!-- ============ 20 源码 设备管理二 ============ -->
-  <section class="slide compact" data-deck-label="源码 设备管理二">
-    <p class="kicker">Appendix · 源码精读 ③</p>
-    <h2 class="h2">设备管理：遍历显示与数量统计</h2>
-    <div class="grid g2 mt-m" style="grid-template-columns:1.25fr 1fr;align-items:start;gap:20px">
-        <div>
-          <pre class="code cmp">    <span class="kw">void</span> <span class="nm">Traverse</span>() <span class="kw">const</span> {
-        <span class="kw">if</span> (count == 0) { cout &lt;&lt; "  当前无在线设备。" &lt;&lt; endl; <span class="kw">return</span>; }
-        cout &lt;&lt; "  序号    优先级    设备ID    类型    最近上报" &lt;&lt; endl;
-        Device* p = head-&gt;next;
-        <span class="kw">int</span> i = 1;
-        <span class="kw">while</span> (p != <span class="kw">NULL</span>) {
-            cout &lt;&lt; "  " &lt;&lt; i++ &lt;&lt; "    " &lt;&lt; p-&gt;priority &lt;&lt; "    " &lt;&lt; p-&gt;id
-                 &lt;&lt; "    " &lt;&lt; <span class="nm">TYPE_NAME</span>[p-&gt;type] &lt;&lt; "    " &lt;&lt; p-&gt;lastReport &lt;&lt; endl;
-            p = p-&gt;next;
-        }
-    }</pre>
-          <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · DeviceList::Traverse() 按优先级顺序输出</p>
-        </div>
-        <div>
-          <pre class="code cmp">    <span class="kw">void</span> <span class="nm">Statistic</span>() <span class="kw">const</span> {
-        cout &lt;&lt; "  在线设备总数：" &lt;&lt; count &lt;&lt; endl;
-        <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; 3; i++)
-            cout &lt;&lt; "  " &lt;&lt; <span class="nm">TYPE_NAME</span>[i] &lt;&lt; "设备数量：" &lt;&lt; typeCount[i] &lt;&lt; endl;
-    }
-
-    <span class="kw">int</span> <span class="nm">Size</span>() <span class="kw">const</span> { <span class="kw">return</span> count; }</pre>
-          <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · DeviceList::Statistic() 与 Size()</p>
-        </div>
-    </div>
-    <div class="deck-footer"><span class="dim2">附录 · 设备管理（二）</span><span class="slide-number" data-current="20" data-total="24"></span></div>
-    <div class="notes">遍历之所以能直接输出优先级顺序，是因为链表在注册时就按「优先级升序、同级按设备ID字典序」插好了，遍历不用再排序，顺链走一遍就是目标顺序，代价只有 O(n)。输出时序号用 i++ 递增，各列之间用空格分开。统计里总数直接取 count，三类数量直接取 typeCount 数组——这两个变量在注册和注销的时候就同步维护了，所以统计不需要再遍历链表，是 O(1)。</div>
-  </section>
-
-  <!-- ============ 21 源码 指令栈操作 ============ -->
-  <section class="slide compact" data-deck-label="源码 指令栈操作">
-    <p class="kicker">Appendix · 源码精读 ④</p>
-    <h2 class="h2">指令栈：压栈、弹栈、读栈顶与清空</h2>
-    <div class="grid g2 mt-m" style="grid-template-columns:1.15fr 1fr;align-items:start;gap:20px">
-        <div>
-          <pre class="code cmp">    <span class="kw">void</span> <span class="nm">Push</span>(<span class="kw">const</span> Command&amp; c) {
-        Command* s = <span class="kw">new</span> Command;
-        *s = c;
-        s-&gt;next = top;
-        top = s;
-        count++;
-    }
-
-    <span class="kw">bool</span> <span class="nm">Pop</span>(Command&amp; c) {
-        <span class="kw">if</span> (top == <span class="kw">NULL</span>) <span class="kw">return</span> <span class="kw">false</span>;
-        c = *top;
-        Command* p = top;
-        top = top-&gt;next;
-        <span class="kw">delete</span> p;
-        count--;
-        <span class="kw">return</span> <span class="kw">true</span>;
-    }</pre>
-          <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · CommandStack::Push() 与 Pop()</p>
-        </div>
-        <div>
-          <pre class="code cmp">    <span class="kw">bool</span> <span class="nm">GetTop</span>(Command&amp; c) <span class="kw">const</span> {
-        <span class="kw">if</span> (top == <span class="kw">NULL</span>) <span class="kw">return</span> <span class="kw">false</span>;
-        c = *top;
-        <span class="kw">return</span> <span class="kw">true</span>;
-    }
-
-    <span class="kw">void</span> <span class="nm">Clear</span>(<span class="kw">bool</span> echo = <span class="kw">true</span>) {
-        Command c;
-        <span class="kw">while</span> (<span class="nm">Pop</span>(c))
-            <span class="kw">if</span> (echo)
-                cout &lt;&lt; "  [撤销] 指令编号：" &lt;&lt; c.no &lt;&lt; "    目标设备：" &lt;&lt; c.targetId
-                     &lt;&lt; "    内容：" &lt;&lt; c.content &lt;&lt; "    下发时间：" &lt;&lt; c.time &lt;&lt; endl;
-    }</pre>
-          <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · CommandStack::GetTop() 与 Clear()</p>
-        </div>
-    </div>
-    <div class="deck-footer"><span class="dim2">附录 · 指令栈操作</span><span class="slide-number" data-current="21" data-total="24"></span></div>
-    <div class="notes">指令管理和栈的四个基本操作。压栈是头插法：新结点直接接到 top 前面，自己成为新的栈顶，所以下发指令是 O(1)；弹栈就是删掉第一个结点，先把内容拷出来再删，保证撤销时能打印出被撤销指令的完整信息。读栈顶只把内容复制出来、不改动栈，用于"查看最近指令"。清空是一个 while 循环反复弹栈直到空，带上 echo 参数是为了复用：撤销全部时要把每条指令都打印出来，而析构对象时不需要打印。至于"不破坏栈结构查看全部历史"，用的是辅助栈两轮倒换，在第 11 页已经单独展开过。</div>
-  </section>
-
-  <!-- ============ 22 源码 循环队列 ============ -->
-  <section class="slide compact" data-deck-label="源码 循环队列">
-    <p class="kicker">Appendix · 源码精读 ⑤</p>
-    <h2 class="h2">循环队列的判空判满、出队与缓存分流</h2>
-    <div class="grid g2 mt-m" style="grid-template-columns:1fr 1fr;align-items:start;gap:20px">
-        <div>
-          <pre class="code cmp">    <span class="nm">CircularQueue</span>() { front = rear = count = 0; }
-
-    <span class="kw">bool</span> <span class="nm">Full</span>()  <span class="kw">const</span> { <span class="kw">return</span> count == QUEUE_CAP; }
-    <span class="kw">bool</span> <span class="nm">Empty</span>() <span class="kw">const</span> { <span class="kw">return</span> count == 0; }
-    <span class="kw">int</span>  <span class="nm">Size</span>()  <span class="kw">const</span> { <span class="kw">return</span> count; }
-
-    <span class="kw">bool</span> <span class="nm">EnQueue</span>(<span class="kw">const</span> DataPacket&amp; p, DataPacket* dropped = <span class="kw">NULL</span>) {
-        <span class="kw">if</span> (<span class="nm">Full</span>()) { <span class="cmt">// 队满：先把最旧的挤出去，再放新数据</span>
-            <span class="kw">if</span> (dropped != <span class="kw">NULL</span>) *dropped = data[front];
-            front = (front + 1) % QUEUE_CAP;   <span class="cmt">// 队头后移一格，到末尾绕回0</span>
-            count--;
-        }
-        data[rear] = p;
-        rear = (rear + 1) % QUEUE_CAP;     <span class="cmt">// 队尾后移一格，到末尾绕回0</span>
-        count++;
-        <span class="kw">return</span> <span class="kw">true</span>;
-    }
-
-    <span class="kw">bool</span> <span class="nm">DeQueue</span>(DataPacket&amp; p) {
-        <span class="kw">if</span> (<span class="nm">Empty</span>()) <span class="kw">return</span> <span class="kw">false</span>;
-        p = data[front];
-        front = (front + 1) % QUEUE_CAP;
-        count--;
-        <span class="kw">return</span> <span class="kw">true</span>;
-    }</pre>
-          <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · CircularQueue 的构造与入队/出队</p>
-        </div>
-        <div>
-          <pre class="code cmp">        } <span class="kw">else</span> <span class="kw">if</span> (op == 2) {
-            DataPacket p;
-            p.seq = nextSeq++;
-            cout &lt;&lt; "输入 设备ID 数据值 采集时间戳: ";
-            cin &gt;&gt; p.deviceId &gt;&gt; p.value &gt;&gt; p.time;
-            p.deviceId[ID_LEN - 1] = '\0';
-            <span class="kw">if</span> (networkUp) {
-                cout &lt;&lt; "  [上传] 序列号：" &lt;&lt; p.seq &lt;&lt; "    设备：" &lt;&lt; p.deviceId
-                     &lt;&lt; "    数据值：" &lt;&lt; fixed &lt;&lt; setprecision(2) &lt;&lt; p.value
-                     &lt;&lt; "    采集时间：" &lt;&lt; p.time &lt;&lt; endl;
-            } <span class="kw">else</span> {
-                DataPacket dropped;
-                <span class="kw">bool</span> overflow = cache.<span class="nm">Full</span>();
-                cache.<span class="nm">EnQueue</span>(p, &amp;dropped);
-                <span class="kw">if</span> (overflow)
-                    cout &lt;&lt; "  [丢弃] 序列号：" &lt;&lt; dropped.seq &lt;&lt; "    设备：" &lt;&lt; dropped.deviceId
-                         &lt;&lt; "    —— 缓存已满，丢弃最旧数据" &lt;&lt; endl;
-                cout &lt;&lt; "  [缓存] 序列号：" &lt;&lt; p.seq &lt;&lt; "    设备：" &lt;&lt; p.deviceId
-                     &lt;&lt; "    数据值：" &lt;&lt; fixed &lt;&lt; setprecision(2) &lt;&lt; p.value
-                     &lt;&lt; "    采集时间：" &lt;&lt; p.time
-                     &lt;&lt; "    已入队（" &lt;&lt; cache.<span class="nm">Size</span>() &lt;&lt; "/" &lt;&lt; QUEUE_CAP &lt;&lt; "）" &lt;&lt; endl;
-            }</pre>
-          <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · cacheMenu() 中「接收一条数据」的分流分支</p>
-        </div>
-    </div>
-    <div class="deck-footer"><span class="dim2">附录 · 循环队列</span><span class="slide-number" data-current="22" data-total="24"></span></div>
-    <div class="notes">循环队列用 count 计数器来区分队满和队空：只用 front 和 rear 两个下标时，(rear+1)%50 等于 front 既可能是满也可能是空，没法区分，加了 count 之后 0 就是空、50 就是满。出队是取走队头那个最旧的数据包，然后把 front 环形后移一格。右边是实际业务代码：收到一条数据时先看网络状态，正常就直接上传、不进缓存；中断才走入队分支。入队之前先用 Full() 记住当时是不是满的，因为 EnQueue 内部会把最旧的挤出去，事后靠这个标志决定要不要打印"已满，丢弃最旧"那条日志。</div>
-  </section>
-
-  <!-- ============ 23 源码 主程序 ============ -->
-  <section class="slide compact" data-deck-label="源码 主程序">
-    <p class="kicker">Appendix · 源码精读 ⑥</p>
-    <h2 class="h2">主程序：菜单调度与退出</h2>
-    <div class="grid g2 mt-m" style="grid-template-columns:1fr 1fr;align-items:start;gap:20px">
-        <div>
-          <pre class="code cmp"><span class="kw">int</span> <span class="nm">main</span>() {
-<span <span class="kw">class</span>="kw">#ifdef</span> _WIN32
-    <span class="nm">SetConsoleOutputCP</span>(65001);   <span class="cmt">// 让控制台用UTF-8输出，不然中文是乱码</span>
-<span <span class="kw">class</span>="kw">#endif</span>
-    <span class="kw">int</span> choice;
-    <span class="kw">while</span> (<span class="kw">true</span>) {
-        <span class="nm">showMainMenu</span>();
-        <span class="kw">if</span> (!(cin &gt;&gt; choice)) <span class="kw">break</span>;
-        <span class="kw">if</span> (choice == 0) <span class="kw">break</span>;
-        <span class="kw">switch</span> (choice) {
-            <span class="kw">case</span> 1: <span class="nm">deviceMenu</span>(); <span class="kw">break</span>;
-            <span class="kw">case</span> 2: <span class="nm">cmdMenu</span>();    <span class="kw">break</span>;
-            <span class="kw">case</span> 3: <span class="nm">cacheMenu</span>();  <span class="kw">break</span>;
-            <span class="kw">default</span>: cout &lt;&lt; "  无效选项，请重新选择！" &lt;&lt; endl;
-        }
-    }
-    cout &lt;&lt; "系统已退出，再见！" &lt;&lt; endl;
-    <span class="kw">return</span> 0;
-}</pre>
-          <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · main() 主循环</p>
-        </div>
-        <div>
-          <pre class="code cmp"><span class="kw">void</span> <span class="nm">showMainMenu</span>() {
-    cout &lt;&lt; "\n========= 工业物联网边缘网关模拟系统 =========" &lt;&lt; endl;
-    cout &lt;&lt; "  1. 设备管理    2. 指令管理    3. 数据缓存" &lt;&lt; endl;
-    cout &lt;&lt; "  0. 退出系统" &lt;&lt; endl;
-    cout &lt;&lt; "----------------------------------------------" &lt;&lt; endl;
-    cout &lt;&lt; "请选择: ";
-}</pre>
-          <p class="dim mt-s" style="font-size:12.5px">源码 · gateway.cpp · showMainMenu() 主菜单</p>
-        </div>
-        <div>
-          <div class="card card-soft">
-            <h4 style="margin:0 0 8px">三个子菜单（结构相同，都是 while + cin 读选项）</h4>
-            <p class="dim" style="margin:0;font-size:14.5px;line-height:1.8"><b>deviceMenu()</b> → 在线设备管理：注册 / 注销 / 查找 / 遍历 / 统计<br><b>cmdMenu()</b> → 控制指令管理：下发 / 撤销最近 / 查看最近 / 撤销全部 / 查看历史<br><b>cacheMenu()</b> → 数据缓存管理：设置网络状态 / 接收数据 / 恢复网络并补传 / 查看缓存状态</p>
-          </div>
-          <p class="dim mt-s" style="font-size:12.5px">各子菜单内选择 0 返回主菜单；每个功能项都对应上面几页展示的方法。</p>
-        </div>
-    </div>
-    <div class="deck-footer"><span class="dim2">附录 · 主程序</span><span class="slide-number" data-current="23" data-total="24"></span></div>
-    <div class="notes">最后是主程序。main 的主循环先打印菜单，再读一个整数选项，输入 0 或者输入流结束就退出，否则用 switch 分发到三个子菜单。三个子菜单的结构完全一致，都是 while 循环加 cin 读选项，选 0 就 return 回到主菜单；每个功能项最终都落到前面几页展示的那些方法上。另外开头这几行 Windows 平台专用的代码是为了解决中文乱码：控制台默认用 GBK 编码，而源程序里的中文字符串是 UTF-8，所以先把输出代码页设成 65001，中文才能正常显示。</div>
-  </section>
-
-  <!-- ============ 24 总结与致谢 ============ -->
+  <!-- ============ 23 总结与致谢 ============ -->
   <section class="slide center tc dv" data-deck-label="总结与致谢">
     <div style="max-width:960px;margin:0 auto">
       <h1 class="h1 anim-fade-up" data-anim="fade-up" style="font-size:120px;line-height:1;margin-bottom:26px">
